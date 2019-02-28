@@ -11,43 +11,17 @@ using namespace std;
  **/
 int main()
 {
-    //Максимальное значение температуры
-    const int maxValue( 5526 );
-    //Минимальное значение температруы
-    const int minValue( -273 );
-    //Переменная для хранения абсолютного значения
-    int absT( 0 );
-    //Максимально допустимое значение температуры
-    int min( maxValue );
-    //Временная переменная для текущей  температуры которая ближе к 0
-    int minT( 0 );
-    
     int n; // the number of temperatures to analyse
-    
     cin >> n; cin.ignore();
-    
-    for ( int i( 0 ) ; i < n; ++i ) {
-        int t; // a temperature expressed as an integer ranging from -273 to 5526
-        cin >> t; cin.ignore();
-        //Если хотя бы один элемент равен 0, или 
-        //не попадает в диапазон, то вываливаемся c 0
-        if( t == 0 || ( t < minValue && t > maxValue ) ) 
-        { 
-            minT = 0; 
-            break;
-        }
-        
-        absT = abs( t );
-        //Если проверяемая температура независимо от знака меньшеньше текущей 
-        //то возьмем ее за ближайшую к 0
-        if( absT < abs( min ) ){
-            minT = min = t;
-        }
-        //Если проверяемая температура == текущей, 
-        //то проверим знаки
-        else if( ( absT == abs( min ) ) && ( t != minT ) ){
-            minT = absT;
-        }
-    }
-    cout << minT << endl;
+    vector<int> temp( n );//Сразу же выделим под вектор память, и заполним вектор
+    for_each( temp.begin(), temp.end(), [&](auto& value){ cin >> value; });
+    //сортируем вектор, при этом если соседние значения по модулю равны, то первым будет без знака
+    sort( temp.begin(),temp.end(), [](const int &x, const int &y){
+        if( abs( x ) != abs( y ) ) return abs( x ) < abs( y );
+        else return x > y;
+    });
+    //выведем результат, при этом проверим на 0
+    if(temp.size()>0)
+    cout << temp[ 0 ];
+    else cout << 0;
 }
